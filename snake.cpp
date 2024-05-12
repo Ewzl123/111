@@ -7,7 +7,7 @@ Map::Map(){
     }
     snake = new Snake ;
 
-    InitMap();
+    InitMap(x);
     
 }
 
@@ -19,7 +19,7 @@ Map::~Map(){
     delete snake;
 }
 
-void Map::InitMap(){///<地图整体的初始化
+void Map::InitMap(int x){///<地图整体的初始化
     InitSnake();
     int i,j;
     for( i = 0;i<SIZE;++i){//这里可以增加地图编辑选择，障碍物也在这里放
@@ -33,7 +33,44 @@ void Map::InitMap(){///<地图整体的初始化
     map[i][j].state=(enum Thing)2;
     map[i][j-1].SnakeNext=1;
     score=0;
+    InitBarrier(x);
+    CreateFood();
 
+}
+
+void Map::InitBarrier(int x){
+    int i=0,j=0;
+    switch (x)
+    {
+    case 1://四周都是围墙
+        for(i= 0; i<SIZE;++i){
+            map[i][0].state=Barrier;
+            map[i][SIZE-1].state=Barrier;
+        }
+        for(j=0; j<SIZE;++j){
+            map[0][j].state=Barrier;
+            map[SIZE-1][j].state=Barrier;
+        }
+        break;
+    
+    case 2:
+        for(i= 0; i<SIZE;++i){
+            map[i][0].state=Barrier;
+            map[i][SIZE-1].state=Barrier;
+        }
+        for(j=0; j<SIZE;++j){
+            map[0][j].state=Barrier;
+            map[SIZE-1][j].state=Barrier;
+        }
+        map[SIZE/4][SIZE/4].state=Barrier;
+        map[3*SIZE/4][SIZE/4].state=Barrier;
+        map[SIZE/4][3*SIZE/4].state=Barrier;
+        map[3*SIZE/4][3*SIZE/4].state=Barrier;
+        break;
+    
+    default://默认是没有边界
+        break;
+    }
 }
 
 void Map::InitSnake(){///<蛇的初始化
@@ -65,7 +102,12 @@ void Map::Move(int direct){///<蛇移动一步，判断存活和吃食物
     default:
         CheckDead();
     }
-    
+
+    if(i<0)i=SIZE-1;
+    if(i>=SIZE)i=0;
+    if(j<0)j=SIZE-1;
+    if(j>=SIZE)j=0;
+
     snake->SnakeBodyX.push(i);
     snake->SnakeBodyY.push(j);
     map[i][j].SnakeNext=1;
@@ -85,6 +127,8 @@ void Map::CreateFood(){///<每吃一次食物后，地图随机生成一个新�
 				foody=rand()%(SIZE-2)+1;
 			  }while(map[foodx][foody].state!=0);
 			map[foodx][foody].state=(Thing)3;
+        food.Foodx=foodx;
+        food.Foody=foody;
 
 }
 
@@ -107,8 +151,16 @@ bool Map::CheckLive(){///<监测蛇生命值，小于等于0时结束游戏
 		else return true;
 }
 
-void Map::Replay(){///<重新开始游戏
-     InitMap();
+void Map::Restart(){///<重新开始游戏
+    InitMap(x);
+}
+
+void Map::End(){
+
 }
 
 int Map::GetScore(){return score;}
+
+int Map::GetFoodx(){return food.Foodx;}
+
+int Map::GetFoody(){return food.Foody;}
