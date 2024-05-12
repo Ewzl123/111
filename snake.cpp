@@ -47,6 +47,7 @@ void Map::InitSnake(){///<蛇的初始化
     snake->SnakeBodyY.push(SIZE/2);
     snake->SnakeDirection=UP;
     snake->SnakeLenth=1;
+    snake->SnakeLive=1;
 }
 
 void Map::Move(int direct){///<蛇移动一步，判断存活和吃食物
@@ -97,8 +98,13 @@ bool Map::CheckEaten(){///<判断这一步是否吃到食物
 }
 
 void Map::CheckDead(){///<判断这一步是否撞墙或撞到自身
-    if(map(Snake->SnakeBodyX.back(),Snake->SnakeBodyY.back()).state==1||map(Snake->SnakeBodyX.back(),Snake->SnakeBodyY.back()).state==2)
-        Replay();//这里后续加终止游戏弹窗之类的
+    if(map[snake->SnakeBodyX.back()][snake->SnakeBodyY.back()].state==1||map[snake->SnakeBodyX.back()][snake->SnakeBodyY.back()].state==2)
+       --snake->SnakeLive;
+}
+
+bool Map::CheckLive(){///<监测蛇生命值，小于等于0时结束游戏
+	if(snake->SnakeLive<=0)return false;
+		else return true;
 }
 
 void Map::Replay(){///<重新开始游戏
