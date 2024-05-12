@@ -56,6 +56,13 @@ typedef struct{
 		int SnakeLive;
 } Snake;
 
+typedef struct 
+{
+	int Foodx;
+	int Foody;
+} Food;
+
+
 /*!
  * @brief 地图
  * @param map 地图上的所有点
@@ -68,20 +75,25 @@ class Map {
 		MapDot** map;
 		Snake* snake;
 		int score;
+		Food food;
 
 	public:
 		Map();
 		~Map();
 
-		void InitMap();
+		void InitMap(int );
+		void InitBarrier(int );
 		void InitSnake();
 		void Move(int );
 		void CreateFood();
 		bool CheckEaten();
 		void CheckDead();
-		void Replay();
+		void Restart();
 		int  GetScore();
 		bool CheckLive();
+		void End();
+		int  GetFoodx();
+		int  GetFoody();
 
 };
 
