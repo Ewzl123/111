@@ -2,6 +2,7 @@
 #include<iostream>
 #include<queue>
 #include<cstdio>
+#include<ctime>
 //还有需要加的头文件
 
 #define SIZE 100 ///<场景大小
@@ -44,6 +45,7 @@ typedef struct {
  * @param snakebody 蛇的每一个位置用二维队列存储，对应每个点的横纵坐标
  * @param SnakeDirection 蛇下一步方向
  * @param SnakeLenth 蛇的长度，用于计分
+ * @param SnakeLife 蛇的生命，初始为1，每触发一次死亡减一；后续可以增加生命条数
  */
 
 typedef struct{
@@ -51,6 +53,7 @@ typedef struct{
 		std::queue<int> SnakeBodyY;
 		Direction SnakeDirection;
 		int SnakeLenth;
+		int SnakeLive;
 } Snake;
 
 /*!
@@ -78,6 +81,7 @@ class Map {
 		void CheckDead();
 		void Replay();
 		int  GetScore();
+		bool CheckLive();
 
 };
 
