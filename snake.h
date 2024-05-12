@@ -75,7 +75,7 @@ class Map {
 		void Move(int );
 		void CreateFood();
 		bool CheckEaten();
-		bool CheckDead();
+		void CheckDead();
 		void Replay();
 		int  GetScore();
 
